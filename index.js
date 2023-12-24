@@ -15,7 +15,9 @@ app.get('/users', (request, response) => {
   const DEFAULT_LIMIT = 10;
   const limit = parseInt(request.query.limit ?? DEFAULT_LIMIT);
 
-  if (Number.isNaN(limit)) return response.status(400).end();
+  if (Number.isNaN(limit)) {
+    return response.status(400).end();
+  }
   
   response.json(users.slice(0, limit));
 });
@@ -23,7 +25,15 @@ app.get('/users', (request, response) => {
 app.get('/users/:id', (request, response) => {
   const id = parseInt(request.params.id);
 
+  if (Number.isNaN(id)) {
+    return response.status(400).end();
+  }
+
   const user = users.find((user) => user.id === id);
+
+  if (user === undefined) {
+    return response.status(404).end();
+  }
 
   response.json(user);
 })
