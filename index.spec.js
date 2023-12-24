@@ -2,7 +2,7 @@ const app = require('./index');
 const request = require('supertest');
 const should = require('should');
 
-describe('GET /users는', () => {
+describe('GET /users 는', () => {
   describe('성공시', () => {
     it('모든 유저 객체를 담은 배열로 응답한다.', (done) => {
       request(app)
@@ -32,3 +32,16 @@ describe('GET /users는', () => {
     });
   });
 }); 
+
+describe('GET /users/1 는', () => {
+  describe('성공시', () => {
+    it ('id가 1인 유저객체를 반환한다.', (done) => {
+      request(app)
+        .get('/users/1')
+        .end((error, response) => {
+          response.body.should.have.property('id', 1);
+          done();
+        });
+    }); 
+  });
+});

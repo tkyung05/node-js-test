@@ -20,6 +20,14 @@ app.get('/users', (request, response) => {
   response.json(users.slice(0, limit));
 });
 
+app.get('/users/:id', (request, response) => {
+  const id = parseInt(request.params.id);
+
+  const user = users.find((user) => user.id === id);
+
+  response.json(user);
+})
+
 app.listen(3000, function(){
   console.log('running server! port 3000');
 });
