@@ -1,13 +1,34 @@
 const app = require('./index');
 const request = require('supertest');
+const should = require('should');
 
 describe('GET /users는', () => {
-  it('유저 목록 전체를 불러온다', (done) => {
-    request(app)
-      .get('/users')
-      .end((error, response) => {
-        console.log(response.body);
-        done();
-      })
+  describe('성공시', () => {
+    it('모든 유저 객체를 담은 배열로 응답한다.', (done) => {
+      request(app)
+        .get('/users')
+        .end((error, response) => {
+          response.body.should.be.instanceOf(Array);
+          done();
+        })
+    });
+
+    it('최대 limit 개수만큼 응답한다.', (done) => {
+      request(app)
+        .get('/users?limit=2')
+        .end((error, response) => {
+          response.body.should.have.lengthOf(2);
+          done();
+        })
+    });
   });
-});
+
+  describe('실패시', () => { 
+    it('limit이 숫자형이 아니면 400을 응답한다.', (done) => {
+      request(app)
+        .get('/users?limit=two')
+        .expect(400)
+        .end(done);
+    });
+  });
+}); 
