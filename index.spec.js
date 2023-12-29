@@ -61,3 +61,48 @@ describe('GET /users/1 는', () => {
     }); 
   });
 });
+
+describe('DELETE /users/1 는', () => {
+  describe('성공시', () => { 
+    it ('204로 응답한다.', (done) => {
+      request(app)
+        .delete('/users/1')
+        .expect(204)
+        .end(done);
+    });
+  });
+
+  describe('실패시', () => {
+    it ('id가 숫자가 아닐 경우 400으로 응답한다.', (done) => {
+      request(app)
+        .delete('/users/1')
+        .end(done)
+    })
+  }); 
+});
+
+describe('POST /users 는', () => {
+  describe('성공시', () => {
+    const NAME = 'tkkkk';
+    let body = null;
+
+    before((done) => {
+      request(app)
+        .post('/users')
+        .send({ name: NAME })
+        .expect(201)
+        .end((error, response) => {
+          body = response.body; 
+          done();
+        });
+    });
+
+    it('생성된 유저 객체를 반환한다.', () => {
+      body.should.have.property('id');
+    })
+
+    it ('입력한 name을 반환한다.', () => {
+      body.should.have.property('name', NAME);
+    })
+  })
+});
